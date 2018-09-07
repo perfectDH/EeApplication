@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>SpringMVCDemo</display-name>
+
+  <!-- springMVC有一个核心Servlet，所有的请求都会走到这个servlet里面
+  servlet里面根据请求的url找到对应的处理方法（handler）
+   要自己写handler（不同的url有不同的handler） -->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+      <init-param>
+          <!-- 告诉DispatcherServlet，我的spring配置文件在哪里
+          param name 固定这样写 -->
+          <param-name>contextConfigLocation</param-name>
+          <param-value>classpath:application.xml</param-value>
+      </init-param>
+  </servlet>
+
+ <servlet-mapping>
+   <servlet-name>dispatcherServlet</servlet-name>
+   <url-pattern>*.action</url-pattern>
+ </servlet-mapping>
+
+</web-app>

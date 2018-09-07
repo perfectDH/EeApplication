@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dh.Dao.UserDao">
+    <!--查询用户-->
+    <sql id="selectUser">select user_id,user_name,user_psw,user_email,user_phone,user_visitname,user_visitid,user_message,user_registrtime</sql>
+    <!--查询地址-->
+    <sql id="selectAddr">
+
+        select addr_id,user_id,receive_name,receive_phone,province_id,city_id,area_id,address,post_code
+    </sql>
+
+    <!--多表联查-->
+    <sql id="moreTableQueryByuserId">
+        select addr_id ,user_id,receive_name,receive_phone,addr.province_id,addr.city_id,addr.area_id
+        address,post_code,p.name province_name,c.name city_name,a.name area_name
+    </sql>
+
+    <!--注册-->
+    <insert id="register" parameterType="User">
+
+        insert into user(user_name,user_psw,user_email,user_phone,user_visitname,user_visitid,user_message,user_registrtime)
+        values (#{loginName},#{password},#{email},#{mobile},#{visitname},#{visitid},#{message},#{date});
+    </insert>
+
+    <select id="login"
+            resultMap="usershow">
+        <include refid="selectUser"></include>from user WHERE
+        user_name=#{arg0} and user_psw=#{arg1}
+    </select>
+    <resultMap id="usershow" type="User">
+        <id property="userId" column="user_id"></id>
+        <result property="name" column="user_name"></result>
+        <result property="pwd" column="user_psw"></result>
+        <result property="email" column="user_email"></result>
+        <result property="mobile" column="user_phone"></result>
+        <result property="inviteName" column="user_visitname"></result>
+        <result property="inviteId" column="user_visitid"></result>
+        <result property="idNo" column="user_message"></result>
+        <result property="createTime" column="user_registrtime"></result>
+    </resultMap>
+
+
+    <select id="findUserAddrbyId" resultType="Addr">
+        <include refid="moreTableQueryByuserId"></include>
+        from t_address addr,t_province p,t_city c,t_area a
+        where addr.province_id=p.id and addr.city_id=c.id and addr.area_id=a.id and user_id=#{arg0}
+    </select>
+
+
+</mapper>
